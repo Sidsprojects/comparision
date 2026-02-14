@@ -22,10 +22,6 @@ const DB_CONFIG = {
     database: process.env.DB_NAME
 };
 
-/* =====================================
-   Format Procedure for Deployment
-===================================== */
-
 function formatProcedure(procName, createSQL) {
 
     // Remove DEFINER if present (recommended)
@@ -86,10 +82,6 @@ async function getProcedureFromDB(connection, procName) {
     return rows[0]['Create Procedure'];
 }
 
-/* =====================================
-   Compare OLD Backup vs NEW DB
-===================================== */
-
 async function compareProcedures(oldProcs, procNames) {
 
     const connection = await mysql.createConnection(DB_CONFIG);
@@ -127,11 +119,6 @@ async function compareProcedures(oldProcs, procNames) {
     return { modified, dbProcedures };
 }
 
-
-/* =====================================
-   Save Modified (NEW DB VERSION)
-===================================== */
-
 function saveResults(modifiedList, dbProcedures) {
 
     if (!fs.existsSync(OUTPUT_FOLDER)) {
@@ -165,11 +152,9 @@ async function main() {
 
     saveResults(modified, dbProcedures);
 
-    console.log('==============================');
     console.log(`Modified procedures: ${modified.length}`);
     console.log(`List saved: ${OUTPUT_LIST}`);
     console.log(`New SQL saved in: ${OUTPUT_FOLDER}`);
-    console.log('==============================');
 }
 
 main();
